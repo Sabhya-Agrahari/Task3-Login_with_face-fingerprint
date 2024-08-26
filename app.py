@@ -98,7 +98,7 @@ def send_otp(phone_number):
         message = client.messages.create(
             body=f'Your OTP is: {otp}',
             from_="+16082004392",  # Your Twilio phone number
-            to="+919455956183"  # Recipient's phone number
+            to="+91"  # Recipient's phone number
         )
         return True, f'SMS sent successfully! Message ID: {message.sid}'
     except Exception as e:
