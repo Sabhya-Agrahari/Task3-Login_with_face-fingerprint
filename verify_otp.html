@@ -1,0 +1,70 @@
+<!-- verify_otp.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Verify OTP</title>
+    <style>
+  
+        .container {
+            width: 35%; /* adjust to desired width */
+            margin: 10 auto; /* center the container */
+            border-radius: 10px;
+            background-color: #f2f2f2;
+            padding: 9px;
+            margin-top: 6px;
+            border-spacing: 2px;
+            padding-top: 0px;
+            
+        
+          
+          }
+                 
+              .btn {
+                    margin-top: 20px;
+                    width: 100px;
+                    height: 35px;
+                    background-color: grey;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }.btn1{width:100px;}
+              .btn2{width:200px;}
+              .btn:hover {
+                  
+                
+                    background-color: #555;
+                }
+                .bottom {
+                    text-align: center;
+                    margin-top: 10px;
+                }
+        
+        
+                </style>
+               
+</head>
+<body>
+    <center><h1>Amazon.in</h1></center>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="container">
+        <center><h1>Verify OTP</h1></center>
+    <form method="post" action="{{ url_for('verify_otp') }}">
+        <div class="form-group">
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp" required><br><br></div>
+        
+        <button type="submit" class="btn btn-primary">Verify OTP</button>
+    </form>
+    </div>
+</body>
+</html>

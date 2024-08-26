@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Login with Face and Fingerprint</title>
+    <style>
+        video {
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+        }
+
+        .container {
+            width: 35%; /* adjust to desired width */
+            margin: 10 auto; /* center the container */
+            border-radius: 10px;
+            background-color: #f2f2f2;
+            padding: 9px;
+            margin-top: 6px;
+            border-spacing: 2px;
+            padding-top: 0px;
+        }
+           
+        .btn {
+            margin-top: 20px;
+            width: 100px;
+            height: 35px;
+            background-color: grey;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn1 { width: 100px; }
+        .btn2 { width: 200px; }
+        .btn:hover {
+            background-color: #555;
+        }
+        .bottom {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <center><h1>Amazon.in</h1></center>
+    <div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <form id="loginForm" method="POST" enctype="multipart/form-data">
+        <div class="container">
+            <center><h2>Login With Face and Fingerprint</h2></center>
+            <div class="form-group">{{ form.hidden_tag() }}</div>
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}<br><br>
+                {% for error in form.email.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <video id="video" autoplay></video>
+                <button id="captureButton" class="btn btn-primary" type="button">Capture Face</button>
+                <canvas id="canvas" style="display: none;"></canvas>
+                <input type="hidden" id="photo" name="photo">
+            </div>
+            <div class="form-group">
+                <input type="file" id="fingerprintInput" name="fingerprint" accept="image/*">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('captureButton');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function(err) {
+                    console.error('Error accessing the camera: ', err);
+                });
+
+            captureButton.addEventListener('click', function() {
+                const context = canvas.getContext('2d');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                const photoData = canvas.toDataURL('image/jpeg');
+                document.getElementById('photo').value = photoData;
+
+                // Stop the video stream after capturing the image
+                video.srcObject.getVideoTracks().forEach(track => track.stop());
+            });
+        } else {
+            console.error('getUserMedia not supported on your browser!');
+        }
+    </script>
+
+</body>
+</html>
